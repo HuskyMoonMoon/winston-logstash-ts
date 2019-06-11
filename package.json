@@ -1,6 +1,6 @@
 {
   "name": "winston-logstash-ts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Winston's Logstash transport in UDP protocol",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,10 +27,10 @@
   "homepage": "https://github.com/HuskyMoonMoon/winston-logstash-ts#readme",
   "devDependencies": {
     "@types/node": "^12.0.7",
-    "@types/winston": "^2.4.4",
     "typescript": "^2.9.2"
   },
   "dependencies": {
+    "logform": "^2.1.2",
     "winston": "^3.2.1",
     "winston-transport": "^4.3.0"
   }
