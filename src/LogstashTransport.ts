@@ -34,7 +34,7 @@ export class LogstashTransport extends Transport {
       return callback(null, true);
     }
 
-    this.send(info, (err) => {
+    this.send(info[Symbol.for('message')], (err) => {
       this.emit("logged", !err);
       callback(err, !err);
     })
@@ -42,7 +42,7 @@ export class LogstashTransport extends Transport {
 
   public send(message, callback) {
     message = this.format.transform(message);
-    const buf = Buffer.from(JSON.stringify(message));
+    const buf = Buffer.from(message);
     this.client.send(buf, 0, buf.length, this.port, this.host, (callback || (() => { })));
   }
 
