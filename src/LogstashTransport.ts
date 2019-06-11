@@ -42,7 +42,7 @@ export class LogstashTransport extends Transport {
 
   public send(message, callback) {
     message = this.format.transform(message);
-    const buf = Buffer.from(message);
+    const buf = Buffer.from(JSON.stringify(message));
     this.client.send(buf, 0, buf.length, this.port, this.host, (callback || (() => { })));
   }
 
