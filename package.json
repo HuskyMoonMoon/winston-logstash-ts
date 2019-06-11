@@ -1,6 +1,6 @@
 {
-  "name": "hwrld",
-  "version": "2.0.0",
+  "name": "winston-logstash-ts",
+  "version": "0.1.0",
   "description": "Winston's Logstash transport in UDP protocol",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bersling/typescript-library-starter.git"
+    "url": "git+https://github.com/HuskyMoonMoon/winston-logstash-ts.git"
   },
   "keywords": [
     "typescript",
@@ -22,15 +22,15 @@
   "author": "Chayapol Limanon <chayapol.limanon@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bersling/typescript-library-starter/issues"
+    "url": "https://github.com/HuskyMoonMoon/winston-logstash-ts/issues"
   },
-  "homepage": "https://github.com/bersling/typescript-library-starter#readme",
+  "homepage": "https://github.com/HuskyMoonMoon/winston-logstash-ts#readme",
   "devDependencies": {
     "@types/node": "^12.0.7",
+    "@types/winston": "^2.4.4",
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@types/winston": "^2.4.4",
     "winston": "^3.2.1",
     "winston-transport": "^4.3.0"
   }

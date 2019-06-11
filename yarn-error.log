@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add @types/winston-transport
+  /usr/bin/node /usr/share/yarn/bin/yarn.js publish
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,54 +14,52 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fwinston-transport: Not found
-      at Request.params.callback [as _callback] (/usr/share/yarn/lib/cli.js:66058:18)
-      at Request.self.callback (/usr/share/yarn/lib/cli.js:129541:22)
+  Error: canceled
+      at Interface.<anonymous> (/usr/share/yarn/lib/cli.js:125801:13)
+      at emitNone (events.js:106:13)
+      at Interface.emit (events.js:208:7)
+      at Interface._ttyWrite (readline.js:775:16)
+      at ReadStream.onkeypress (readline.js:160:10)
       at emitTwo (events.js:126:13)
-      at Request.emit (events.js:214:7)
-      at Request.<anonymous> (/usr/share/yarn/lib/cli.js:130513:10)
-      at emitOne (events.js:116:13)
-      at Request.emit (events.js:211:7)
-      at IncomingMessage.<anonymous> (/usr/share/yarn/lib/cli.js:130435:12)
-      at Object.onceWrapper (events.js:313:30)
-      at emitNone (events.js:111:20)
+      at ReadStream.emit (events.js:214:7)
+      at emitKeys (internal/readline.js:420:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1011:36)
 
 npm manifest: 
   {
-    "name": "hwrld",
-    "version": "2.0.0",
-    "description": "Can log \"hello world\" and \"goodbye world\" to the console!",
+    "name": "winston-logstash-ts",
+    "version": "0.1.0",
+    "description": "Winston's Logstash transport in UDP protocol",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "build": "tsc",
-      "link": "npm run build && cd dist && npm link"
+      "link": "yarn build && cd dist && yarn link"
     },
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/bersling/typescript-library-starter.git"
+      "url": "git+https://github.com/HuskyMoonMoon/winston-logstash-ts.git"
     },
     "keywords": [
-      "demo",
       "typescript",
       "library",
-      "hello",
-      "world",
-      "2017"
+      "logstash",
+      "winston"
     ],
-    "author": "Daniel Niederberger <bersling@gmail.com>",
+    "author": "Chayapol Limanon <chayapol.limanon@gmail.com",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/bersling/typescript-library-starter/issues"
+      "url": "https://github.com/HuskyMoonMoon/winston-logstash-ts/issues"
     },
-    "homepage": "https://github.com/bersling/typescript-library-starter#readme",
+    "homepage": "https://github.com/HuskyMoonMoon/winston-logstash-ts#readme",
     "devDependencies": {
       "@types/node": "^12.0.7",
+      "@types/winston": "^2.4.4",
       "typescript": "^2.9.2"
     },
     "dependencies": {
-      "@types/winston": "^2.4.4",
       "winston": "^3.2.1",
       "winston-transport": "^4.3.0"
     }
