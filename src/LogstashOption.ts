@@ -5,6 +5,4 @@ export interface LogstashOption extends LoggerOptions {
   hostname?: string;
   host: string;
   port: number;
-  trailingLineFeed?: boolean;
-  trailingLineFeedChar?: string;
 }

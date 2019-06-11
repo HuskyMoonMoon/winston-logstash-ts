@@ -2,6 +2,7 @@ import * as dgram from "dgram";
 import * as os from "os";
 import * as winston from "winston";
 import * as Transport from "winston-transport";
+import * as logform from "logform"
 import { LogstashOption } from "./LogstashOption";
 
 export class LogstashTransport extends Transport {
@@ -9,8 +10,6 @@ export class LogstashTransport extends Transport {
   public readonly name = "LogstashTransport";
   protected host: string;
   protected port: number;
-  protected trailingLineFeed: boolean;
-  protected trailingLineFeedChar: string;
   protected client: dgram.Socket;
 
   constructor(options?: LogstashOption) {
@@ -18,8 +17,6 @@ export class LogstashTransport extends Transport {
 
     this.host = options.host;
     this.port = options.port;
-    this.trailingLineFeed = options.trailingLineFeed === true;
-    this.trailingLineFeedChar = options.trailingLineFeedChar || os.EOL;
     this.silent = options.silent;
 
     this.client = null;
@@ -37,17 +34,14 @@ export class LogstashTransport extends Transport {
       return callback(null, true);
     }
 
-    this.send(info[Symbol.for("message")], (err) => {
+    this.send(info, (err) => {
       this.emit("logged", !err);
       callback(err, !err);
     })
   }
 
   public send(message, callback) {
-    if (this.trailingLineFeed === true) {
-      message = message.replace(/\s+$/, "") + this.trailingLineFeedChar;
-    }
-
+    message = this.format.transform(message);
     const buf = Buffer.from(message);
     this.client.send(buf, 0, buf.length, this.port, this.host, (callback || (() => { })));
   }
@@ -67,7 +61,7 @@ export class LogstashTransport extends Transport {
       format: winston.format.combine(
         appendMetaInfo(),
         winston.format.json(),
-        winston.format.timestamp()
+        winston.format.timestamp(),
       ),
       transports: [
         new LogstashTransport(logstashOption) as Transport
