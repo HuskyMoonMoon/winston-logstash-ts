@@ -1,5 +1,5 @@
 # winston-logstash-ts
-A winston logstash transport to UDP protocal in Typescript. Rewrite from https://github.com/liuyanjie/winston-logstash-transport
+A winston logstash transport to UDP protocol in Typescript. Rewrite from https://github.com/liuyanjie/winston-logstash-transport
 
 ## Dependencies
 - logform: "^2.1.2",
