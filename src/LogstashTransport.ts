@@ -33,17 +33,31 @@ export class LogstashTransport extends Transport {
     if (this.silent) {
       return callback(null, true);
     }
-
-    this.send(info[Symbol.for('message')], (err) => {
-      this.emit("logged", !err);
-      callback(err, !err);
-    })
+    this.send(info[Symbol.for("message")], callback)
+      .then((result) => {
+        this.emit("logged", result);
+      })
+      .catch((err) => {
+        callback(err, !err);
+      })
   }
 
-  public send(message, callback) {
-    message = this.format.transform(message);
-    const buf = Buffer.from(message);
-    this.client.send(buf, 0, buf.length, this.port, this.host, (callback || (() => { })));
+  public async send(message, callback) {
+    return new Promise((resolve, reject) => {
+      const transformed = JSON.stringify(this.format.transform(JSON.parse(message)));
+      console.log(JSON.parse(transformed))
+      const buf = Buffer.from(transformed);
+      this.client.send(buf, 0, buf.length, this.port, this.host, (error, bytes) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(bytes);
+        }
+        if (callback) {
+          callback(error, bytes);
+        }
+      });
+    })
   }
 
   public static createLogger(logType: string, winstonOption: winston.LoggerOptions, logstashOption: LogstashOption) {
