@@ -60,7 +60,7 @@ export class LogstashTransport extends Transport {
     })
   }
 
-  public static createLogger(logType: string, winstonOption: winston.LoggerOptions, logstashOption: LogstashOption) {
+  public static createLogger(logType: string, logstashOption: LogstashOption) {
     const appendMetaInfo = winston.format((info) => {
       return Object.assign(info, {
         application: logType || logstashOption.application,
@@ -71,7 +71,7 @@ export class LogstashTransport extends Transport {
     });
 
     return winston.createLogger({
-      level: winstonOption.level || "info",
+      level: logstashOption.level || "info",
       format: winston.format.combine(
         appendMetaInfo(),
         winston.format.json(),
@@ -79,7 +79,7 @@ export class LogstashTransport extends Transport {
       ),
       transports: [
         new LogstashTransport(logstashOption) as Transport
-      ].concat(winstonOption.transports || [])
+      ].concat(logstashOption.transports || [])
     });
   }
 }
