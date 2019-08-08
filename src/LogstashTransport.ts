@@ -72,7 +72,13 @@ export class LogstashTransport extends Transport {
           }
         });
       } else {
-        this.tcpClient.write(buf);
+        this.tcpClient.write(transformed, (error) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve();
+          }
+        });
       }
     })
   }
