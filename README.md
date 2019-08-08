@@ -18,6 +18,7 @@ import { LogstashTransport } from "winston-logstash-ts"
 const logstash = new LogstashTransport({
     host: "logstash.hostname.or.ip",
     port: 11200,
+    protocol: "udp", //default is udp, support tcp connection as alternative
     format: logform.format.combine(
         logform.format.timestamp(),
         logform.format.logstash(),
@@ -35,6 +36,7 @@ import { LogstashTransport } from "winston-logstash-ts"
 const logger = LogstashTransport.createLogger("<APP_NAME>", {
     host: "logstash.hostname.or.ip",
     port: 11200,
+    protocol: "udp", //default is udp, support tcp connection as alternative
     format: logform.format.combine(
         logform.format.timestamp(),
         logform.format.logstash(),
