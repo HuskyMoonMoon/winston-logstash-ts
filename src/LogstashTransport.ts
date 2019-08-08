@@ -1,4 +1,5 @@
 import * as dgram from "dgram";
+import * as net from "net";
 import * as os from "os";
 import * as winston from "winston";
 import * as Transport from "winston-transport";
@@ -10,7 +11,9 @@ export class LogstashTransport extends Transport {
   public readonly name = "LogstashTransport";
   protected host: string;
   protected port: number;
-  protected client: dgram.Socket;
+  protected protocol: "tcp" | "udp";
+  protected udpClient: dgram.Socket;
+  protected tcpClient: net.Socket;
 
   constructor(options?: LogstashOption) {
     super(options);
@@ -18,15 +21,25 @@ export class LogstashTransport extends Transport {
     this.host = options.host;
     this.port = options.port;
     this.silent = options.silent;
+    this.protocol = options.protocol || "udp"
 
-    this.client = null;
+    this.udpClient = null;
+    this.tcpClient = null;
 
     this.connect();
   }
 
   public connect() {
-    this.client = dgram.createSocket("udp4");
-    this.client.unref();
+    if (this.protocol === "udp") {
+      this.udpClient = dgram.createSocket("udp4");
+      this.udpClient.unref();
+    } else if (this.protocol === "tcp") {
+      this.tcpClient = new net.Socket();
+      this.tcpClient.connect(this.port, this.host);
+      this.tcpClient.unref();
+    } else {
+      throw new Error("Invalid protocol, only support TCP and UDP.")
+    }
   }
 
   public log(info: any, callback: Function) {
@@ -45,18 +58,22 @@ export class LogstashTransport extends Transport {
   public async send(message, callback) {
     return new Promise((resolve, reject) => {
       const transformed = JSON.stringify(this.format.transform(JSON.parse(message)));
-      console.log(JSON.parse(transformed))
       const buf = Buffer.from(transformed);
-      this.client.send(buf, 0, buf.length, this.port, this.host, (error, bytes) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(bytes);
-        }
-        if (callback) {
-          callback(error, bytes);
-        }
-      });
+
+      if (this.protocol === "udp") {
+        this.udpClient.send(buf, 0, buf.length, this.port, this.host, (error, bytes) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(bytes);
+          }
+          if (callback) {
+            callback(error, bytes);
+          }
+        });
+      } else {
+        this.tcpClient.write(buf);
+      }
     })
   }
 
