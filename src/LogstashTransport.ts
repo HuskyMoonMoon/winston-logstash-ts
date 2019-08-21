@@ -15,6 +15,8 @@ export class LogstashTransport extends Transport {
   protected udpClient: dgram.Socket;
   protected tcpClient: net.Socket;
 
+  protected tcpKeepAliveInitialDelay: number = 0;
+
   constructor(options?: LogstashOption) {
     super(options);
 
@@ -22,6 +24,7 @@ export class LogstashTransport extends Transport {
     this.port = options.port;
     this.silent = options.silent;
     this.protocol = options.protocol || "udp"
+    this.tcpKeepAliveInitialDelay = options.tcpKeepAliveInitialDelay; 
 
     this.udpClient = null;
     this.tcpClient = null;
@@ -36,6 +39,7 @@ export class LogstashTransport extends Transport {
     } else if (this.protocol === "tcp") {
       this.tcpClient = new net.Socket();
       this.tcpClient.connect(this.port, this.host);
+      this.tcpClient.setKeepAlive(true, this.tcpKeepAliveInitialDelay)
       this.tcpClient.unref();
     } else {
       throw new Error("Invalid protocol, only support TCP and UDP.")

@@ -6,4 +6,5 @@ export interface LogstashOption extends LoggerOptions {
   protocol?: "tcp" | "udp";
   host: string;
   port: number;
+  tcpKeepAliveInitialDelay: number;
 }
