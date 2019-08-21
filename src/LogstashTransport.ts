@@ -5,6 +5,7 @@ import * as winston from "winston";
 import * as Transport from "winston-transport";
 import * as logform from "logform"
 import { LogstashOption } from "./LogstashOption";
+import { disconnect } from "cluster";
 
 export class LogstashTransport extends Transport {
 
@@ -24,12 +25,10 @@ export class LogstashTransport extends Transport {
     this.port = options.port;
     this.silent = options.silent;
     this.protocol = options.protocol || "udp"
-    this.tcpKeepAliveInitialDelay = options.tcpKeepAliveInitialDelay; 
+    this.tcpKeepAliveInitialDelay = options.tcpKeepAliveInitialDelay || 0; 
 
     this.udpClient = null;
     this.tcpClient = null;
-
-    this.connect();
   }
 
   public connect() {
@@ -65,6 +64,9 @@ export class LogstashTransport extends Transport {
       const buf = Buffer.from(transformed);
 
       if (this.protocol === "udp") {
+        if (!this.udpClient) {
+          this.connect();
+        }
         this.udpClient.send(buf, 0, buf.length, this.port, this.host, (error, bytes) => {
           if (error) {
             reject(error)
@@ -76,11 +78,17 @@ export class LogstashTransport extends Transport {
           }
         });
       } else {
+        this.connect();
         this.tcpClient.write(transformed, (error) => {
           if (error) {
+            this.tcpClient,disconnect();
             reject(error)
           } else {
+            this.tcpClient,disconnect();
             resolve();
+          }
+          if (callback) {
+            callback(error);
           }
         });
       }
