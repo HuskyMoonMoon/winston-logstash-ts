@@ -94,8 +94,10 @@ export class LogstashTransport extends Transport {
             if (callback) {
               callback(error);
             }
+            
+            tcpClient.destroy();
             if (error) {
-              reject(error)
+              reject(error);
             } else {
               resolve();
             }
