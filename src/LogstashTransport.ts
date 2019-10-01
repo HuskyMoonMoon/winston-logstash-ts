@@ -47,14 +47,18 @@ export class LogstashTransport extends Transport {
         const connectListener = () => {
           debug.color = "46";
           debug("TCP connection to %s:%d has been established.", this.host, this.port);
-          tcpClient.setKeepAlive(true, this.tcpKeepAliveInitialDelay);
-          tcpClient.unref();
+          // tcpClient.setKeepAlive(true, this.tcpKeepAliveInitialDelay);
+          // tcpClient.unref();
           tcpClient.removeListener("connect", connectListener);
           resolve(tcpClient);
         };
 
         tcpClient.on("error", errorListener)
         tcpClient.on("connect", connectListener);
+        tcpClient.on("close", () => {
+          debug.color = "196";
+          debug("TCP connection to %s:%d has been closed.", this.host, this.port);
+        });
         tcpClient.connect(this.port, this.host);
       })
     } else {
@@ -92,10 +96,10 @@ export class LogstashTransport extends Transport {
         const tcpClient: net.Socket = (await this.connect()) as net.Socket;
         await new Promise((resolve, reject) => {
           tcpClient.write(transformed, (error) => {
-            if (callback) {
-              callback(error);
-            }
             
+            if (callback) {
+              callback();
+            }
             tcpClient.destroy();
             if (error) {
               reject(error);
