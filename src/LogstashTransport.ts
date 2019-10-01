@@ -40,6 +40,7 @@ export class LogstashTransport extends Transport {
           debug.color = "196";
           debug("%o", error);
           tcpClient.destroy();
+          tcpClient.removeListener("error", connectListener);
           reject(error);
         }
 
@@ -105,7 +106,7 @@ export class LogstashTransport extends Transport {
         });
       } catch (error) {
         if (callback) {
-          callback(error);
+          callback();
         }
         throw error;
       }
