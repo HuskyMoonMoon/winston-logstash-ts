@@ -3,8 +3,8 @@ A winston logstash transport to UDP protocol in Typescript. Rewrite from https:/
 
 ## Dependencies
 - logform: "^2.1.2",
-- winston: "^3.2.1",
-- winston-transport: "^4.3.0"
+- winston: "^3.3.3",
+- winston-transport: "^4.4.0"
 
 ## Installation
 - Install to your project using `npm -i winston-logstash-ts` or `yarn add winston-logstash-ts`
