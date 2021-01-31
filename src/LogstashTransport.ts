@@ -2,9 +2,9 @@ import * as dgram from "dgram";
 import * as net from "net";
 import * as os from "os";
 import * as winston from "winston";
-import * as Transport from "winston-transport";
+import Transport from 'winston-transport';
 import { LogstashOption } from "./LogstashOption";
-import * as debugging from "debug";
+import debugging from "debug";
 
 const debug = debugging("winston-logstash-ts:LogStashTransport");
 
@@ -96,7 +96,7 @@ export class LogstashTransport extends Transport {
         const tcpClient: net.Socket = (await this.connect()) as net.Socket;
         await new Promise((resolve, reject) => {
           tcpClient.write(transformed, (error) => {
-            
+
             if (callback) {
               callback();
             }

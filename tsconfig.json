@@ -3,6 +3,7 @@
     "module": "commonjs",
     "target": "es5",
     "declaration": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
     "lib": [
       "es2015"
